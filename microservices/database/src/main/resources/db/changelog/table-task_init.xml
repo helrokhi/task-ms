@@ -1,0 +1,66 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet author="Elena Yankovskaya" id="create-table-task">
+
+        <createTable schemaName="tasksystem"
+                     tableName="task"
+                     remarks="Задачи">
+
+            <column autoIncrement="true"
+                    name="id"
+                    type="BIGINT"
+                    remarks="ID задачи">
+                <constraints nullable="false"
+                             primaryKey="true"
+                             primaryKeyName="task_pkey"/>
+            </column>
+
+            <column name="time"
+                    type="timestamp with time zone"
+                    remarks="Дата и время создания"/>
+
+            <column name="author_id"
+                    type="BIGINT"
+                    remarks="Автор">
+                <constraints nullable="false"
+                             foreignKeyName="task_author_id_user_id"
+                             references="tasksystem.user(id)"/>
+            </column>
+
+            <column name="executor_id"
+                    type="BIGINT"
+                    remarks="Исполнитель">
+                <constraints nullable="false"
+                             foreignKeyName="task_executor_id_user_id"
+                             references="tasksystem.user(id)"/>
+            </column>
+
+            <column name="title"
+                    type="text"
+                    remarks="Заголовок"/>
+
+            <column name="task_text"
+                    type="text"
+                    remarks="HTML-текст задачи"/>
+
+            <column name="status"
+                    type="text"
+                    remarks="Статус задачи"/>
+
+            <column name="priority"
+                    type="text"
+                    remarks="Приоритет задачи"/>
+
+            <column name="comments_count"
+                    type="INT"
+                    remarks="Количество комментариев"/>
+
+        </createTable>
+
+    </changeSet>
+
+</databaseChangeLog>
