@@ -22,4 +22,5 @@ public class TaskDto {
     private StatusType status;
     private PriorityType priority;
     private int commentsCount;
+    private boolean isDeleted;
 }

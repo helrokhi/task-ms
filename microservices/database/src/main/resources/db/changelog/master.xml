@@ -7,7 +7,10 @@
 
         <include file="tasksystem-schema-init.xml" relativeToChangelogFile="true"/>
         <include file="auth-user_init.xml" relativeToChangelogFile="true"/>
+        <include file="table-person_init.xml" relativeToChangelogFile="true"/>
         <include file="table-task_init.xml" relativeToChangelogFile="true"/>
         <include file="table-task-comment_init.xml" relativeToChangelogFile="true"/>
+        <include file="add_is_deleted_to_task.xml" relativeToChangelogFile="true"/>
+        <include file="add_is_deleted_to_task_comment.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

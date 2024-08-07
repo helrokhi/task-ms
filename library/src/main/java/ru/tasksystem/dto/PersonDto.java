@@ -6,15 +6,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.OffsetDateTime;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CommentDto {
+public class PersonDto {
     private Long id;
-    private OffsetDateTime time;
-    private Long taskId;
-    private String text;
-    private boolean isDeleted;
+    private Long userId;
+    private String firstName;
+    private String lastName;
+    private OffsetDateTime regDate;
 }
