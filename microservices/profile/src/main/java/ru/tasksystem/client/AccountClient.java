@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.tasksystem.dto.PersonDto;
 
-@FeignClient(name = "databaseClient", dismiss404 = true, url = "${database.url}" + "/account")
+@FeignClient(name = "accountDatabaseClient", dismiss404 = true, url = "${database.url}" + "/account")
 public interface AccountClient {
 
     @GetMapping("/me")

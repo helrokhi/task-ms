@@ -7,7 +7,7 @@ import ru.tasksystem.dto.PersonDto;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-08-12T16:23:00+0200",
+    date = "2024-08-12T17:54:02+0200",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.1 (Oracle Corporation)"
 )
 @Component

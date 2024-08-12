@@ -40,15 +40,15 @@ public interface TaskClient {
     @DeleteMapping("/{id}")
     ResponseEntity<Long> deleteTask(@PathVariable Long id);
 
-    @PatchMapping
+    @PutMapping("/{id}/updateStatus")
     ResponseEntity<Long> updateStatusTask(
-            @RequestBody TaskDto taskDto,
+            @PathVariable Long id,
             @RequestParam String status);
 
 
-    @PatchMapping
+    @PutMapping("/{id}/updateExecutor")
     ResponseEntity<Long> updateExecutorTask(
-            @RequestBody TaskDto taskDto,
+            @PathVariable Long id,
             @RequestParam Long executor);
 
 

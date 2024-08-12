@@ -58,14 +58,14 @@ public class TaskController {
         return taskClient.deleteTask(id);
     }
 
-    @PatchMapping
+    @PutMapping("/{id}/updateStatus")
     public ResponseEntity<Long> updateStatusTask(
             @RequestBody TaskDto taskDto,
             @RequestParam String status) {
         return taskClient.updateStatusTask(taskDto, status);
     }
 
-    @PatchMapping
+    @PutMapping("/{id}/updateExecutor")
     public ResponseEntity<Long> updateExecutorTask(
             @RequestBody TaskDto taskDto,
             @RequestParam Long executor) {

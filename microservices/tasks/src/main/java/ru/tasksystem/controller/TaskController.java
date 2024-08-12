@@ -58,18 +58,18 @@ public class TaskController {
         return taskClient.deleteTask(id);
     }
 
-    @PatchMapping
+    @PutMapping("/{id}/updateStatus")
     public ResponseEntity<Long> updateStatusTask(
-            @RequestBody TaskDto taskDto,
+            @PathVariable Long id,
             @RequestParam String status) {
-        return taskClient.updateStatusTask(taskDto, status);
+        return taskClient.updateStatusTask(id, status);
     }
 
-    @PatchMapping
+    @PutMapping("/{id}/updateExecutor")
     public ResponseEntity<Long> updateExecutorTask(
-            @RequestBody TaskDto taskDto,
+            @PathVariable Long id,
             @RequestParam Long executor) {
-        return taskClient.updateExecutorTask(taskDto, executor);
+        return taskClient.updateExecutorTask(id, executor);
     }
 
     @GetMapping("/{taskId}/comment")
