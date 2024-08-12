@@ -1,0 +1,208 @@
+openapi: 3.0.3
+info:
+    title: Сервис управления задачами openAPI спецификация
+    version: 0.0.1
+servers: 
+    - url: http://localhost:8081/api/v1/tasks/
+      description: Dev server
+paths:
+  /:
+    post:
+        summary: Создание новой задачи
+        tags: 
+          - Tasks Service
+        operationId: addNewTask
+        requestBody: 
+            required: true
+            content: 
+                application/json: 
+                    schema:
+                      $ref: "#/components/schemas/TaskDto"
+        responses:
+            '200':
+                description: Successful operation
+                content:
+                    application/json: 
+                      schema: 
+                        $ref: "#/components/schemas/TaskDto"
+            '400':
+                description: Bad request
+    put:
+        summary: Редактирование задачи
+        tags: 
+          - Tasks Service
+        operationId: editTask
+        requestBody: 
+            required: true
+            content: 
+                application/json: 
+                    schema:
+                      $ref: "#/components/schemas/TaskDto"
+        responses:
+            '200':
+                description: Successful operation
+                content:
+                    application/json: {}
+            '400':
+                description: Bad request
+  /{id}:
+    get:
+        summary: Получение задачи по идентификатору
+        tags: 
+          - Tasks Service
+        operationId: getTaskById
+        parameters:
+            - name: id
+              in: path
+              required: true
+              schema: 
+                type: string
+        responses:
+            '200':
+                description: Successful operation
+                content:
+                    application/json: 
+                      schema: 
+                        $ref: "#/components/schemas/TaskDto"
+            '400':
+                description: Bad request
+
+    delete:
+        summary: Удаление задачи по идентификатору
+        tags: 
+          - Tasks Service
+        operationId: deleteTask
+        parameters:
+            - name: id
+              in: path
+              required: true
+              schema: 
+                type: string
+        responses:
+            '200':
+                description: Successful operation
+                content:
+                    application/json: {}
+            '400':
+                description: Bad request
+  /{id}/updateStatus:
+    put:
+        summary: Обновление статуса задачи по идентификатору
+        tags: 
+          - Tasks Service
+        operationId: updateStatusTask
+        parameters:
+            - name: id
+              in: path
+              required: true
+              schema: 
+                type: string
+            - name: status
+              in: query
+              required: true
+              schema: 
+                type: string
+        responses:
+            '200':
+                description: Successful operation
+                content:
+                    application/json: {}
+            '400':
+                description: Bad request
+  /{id}/updateExecutor:
+    put:
+        summary: Замена исполнителя задачи по идентификатору
+        tags: 
+          - Tasks Service
+        operationId: updateExecutorTask
+        parameters:
+            - name: id
+              in: path
+              required: true
+              schema: 
+                type: string
+            - name: executor
+              in: query
+              required: true
+              schema: 
+                type: string
+        responses:
+            '200':
+                description: Successful operation
+                content:
+                    application/json: {}
+            '400':
+                description: Bad request
+
+components:
+    schemas: 
+        TaskDto:
+            type: object
+            description: Задача
+            required:
+                - authorId
+                - executorId
+                - title
+                - text
+                - status
+                - priority
+                - commentsCount
+            properties:
+                id:
+                    type: string
+                    format: uuid
+                    description: идентификатор
+                time:
+                    type: string
+                    description: Дата создания задачи
+                    format: date-time
+                authorId:
+                    type: string
+                    format: uuid
+                    description: ID автора задачи
+                executorId:
+                    type: string
+                    format: uuid
+                    description: ID исполнителя задачи
+                title:
+                    type: string
+                    description: Заголовок задачи
+                text:
+                    type: string
+                    description: Текст задачи
+                status:
+                    type: string
+                    description: статус
+                    enum: 
+                      - NEW
+                      - WAITING
+                      - PROCESS
+                      - COMPLETE
+                priority:
+                    type: string
+                    description: приоритет
+                    enum: 
+                      - HIGH
+                      - MEDIUM
+                      - LOW
+                commentsCount:
+                    type: string
+                    description: Количество комментариев
+                isDeleted:
+                    type: boolean
+                    description: Удалена ли задача
+        Status:
+            type: string
+            description: Статус задачи
+            enum: 
+                - NEW
+                - WAITING
+                - PROCESS
+                - COMPLETE
+        Priority:
+            type: string
+            description: Статус задачи
+            enum: 
+                - HIGH
+                - MEDIUM
+                - LOW
