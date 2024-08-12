@@ -10,7 +10,7 @@ public interface CommentDtoCommentRecordMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "time", expression = "java(java.time.OffsetDateTime.now())")
-    @Mapping(target = "isDeleted", defaultValue = "false")
+    @Mapping(target = "isDeleted", expression = "java(false)")
     TaskCommentRecord commentDtoToCommentRecord(CommentDto commentDto);
 
     CommentDto commentRecordToCommentDto(TaskCommentRecord commentRecord);

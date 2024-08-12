@@ -2,7 +2,7 @@ package ru.tasksystem.repository;
 
 import jooq.db.Tables;
 import jooq.db.tables.records.TaskRecord;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
@@ -21,7 +21,7 @@ import java.util.Optional;
 
 import static org.jooq.impl.DSL.*;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Repository
 @Slf4j
 public class TaskRepositoryImpl implements TaskRepository {

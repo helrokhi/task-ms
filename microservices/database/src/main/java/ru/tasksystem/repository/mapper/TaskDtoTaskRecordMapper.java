@@ -11,7 +11,7 @@ public interface TaskDtoTaskRecordMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "time", expression = "java(java.time.OffsetDateTime.now())")
-    @Mapping(target = "isDeleted", defaultValue = "false")
+    @Mapping(target = "isDeleted", expression = "java(false)")
     @Mapping(target = "status", defaultValue = "NEW")
     @Mapping(target = "commentsCount", defaultValue = "0")
     TaskRecord taskDtoToTaskRecordForCreate(TaskDto taskDto);

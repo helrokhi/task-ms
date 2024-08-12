@@ -3,7 +3,6 @@ package ru.tasksystem.service.comments;
 import jooq.db.tables.records.TaskCommentRecord;
 import jooq.db.tables.records.TaskRecord;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,9 +19,9 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class CommentServiceImpl implements CommentService {
-    private CommentRepository commentRepository;
-    private TaskRepository taskRepository;
-    private CommentDtoCommentRecordMapper mapper;
+    private final CommentRepository commentRepository;
+    private final TaskRepository taskRepository;
+    private final CommentDtoCommentRecordMapper mapper;
 
     @Override
     public ResponseEntity<Page<CommentDto>> getComments(

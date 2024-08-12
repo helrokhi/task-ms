@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.jooq.DSLContext;
 import jooq.db.Tables;
 import org.springframework.stereotype.Repository;
+import ru.tasksystem.dto.PersonDto;
 import ru.tasksystem.dto.UserAuthDto;
 
 import java.util.List;
@@ -28,5 +29,17 @@ public class UserAuthRepositoryImpl implements UserAuthRepository {
         UserAuthDto user = (!userList.isEmpty()) ? userList.get(0) : null;
 
         return Optional.ofNullable(user);
+    }
+
+    @Override
+    public Optional<PersonDto> getAccountInfo(String email) {
+        return dsl
+                .select()
+                .from(
+                        Tables.USER
+                                .leftOuterJoin(Tables.PERSON)
+                                .on(Tables.USER.ID.eq(Tables.PERSON.USER_ID)))
+                .where(Tables.USER.EMAIL.eq(email))
+                .fetchOptionalInto(PersonDto.class);
     }
 }

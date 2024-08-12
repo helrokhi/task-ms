@@ -27,7 +27,7 @@ public interface TaskService {
 
     ResponseEntity<Long> deleteTask(Long id);
 
-    ResponseEntity<Long> updateStatusTask(TaskDto taskDto, String status);
+    ResponseEntity<Long> updateStatusTask(Long id, String status);
 
-    ResponseEntity<Long> updateExecutorTask(TaskDto taskDto, Long executorId);
+    ResponseEntity<Long> updateExecutorTask(Long id, Long executorId);
 }

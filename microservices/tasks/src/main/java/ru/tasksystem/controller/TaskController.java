@@ -1,33 +1,28 @@
 package ru.tasksystem.controller;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.tasksystem.dto.TaskDto;
+import ru.tasksystem.client.TaskClient;
 import ru.tasksystem.dto.CommentDto;
-import ru.tasksystem.dto.enums.StatusType;
-import ru.tasksystem.service.comments.CommentService;
-import ru.tasksystem.service.tasks.TaskService;
+import ru.tasksystem.dto.TaskDto;
 
 import java.time.OffsetDateTime;
 import java.util.List;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RestController
 @Slf4j
-@RequestMapping("/tasks")
+@RequestMapping("/api/v1/tasks")
 public class TaskController {
-    private final TaskService taskService;
-    private final CommentService commentService;
+    private TaskClient taskClient;
 
     @GetMapping
-    public Page<TaskDto> getAll(
+    public ResponseEntity<Page<TaskDto>> getAll(
             @RequestParam(required = false) List<Long> ids,
             @RequestParam(required = false) List<Long> accountIds,
             @RequestParam(required = false) String author,
@@ -37,44 +32,44 @@ public class TaskController {
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime dateTo,
             @RequestParam(required = false, defaultValue = "time,desc") String sort,
             Pageable pageable) {
-        return taskService.getAll(
+        return ResponseEntity.ok().body(taskClient.getAll(
                 ids, accountIds,
                 author, text, isDeleted,
-                dateFrom, dateTo, sort, pageable);
+                dateFrom, dateTo, sort, pageable));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<TaskDto> getTaskById(@PathVariable Long id) {
-        return taskService.getTaskById(id);
+        return taskClient.getTaskById(id);
     }
 
     @PostMapping
     public TaskDto addNewTask(@RequestBody TaskDto taskDto) {
-        return taskService.addNewTask(taskDto);
+        return taskClient.addNewTask(taskDto);
     }
 
     @PutMapping
     public ResponseEntity<Long> editTask(@RequestBody TaskDto taskDto) {
-        return taskService.editTask(taskDto);
+        return taskClient.editTask(taskDto);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Long> deleteTask(@PathVariable Long id) {
-        return taskService.deleteTask(id);
+        return taskClient.deleteTask(id);
     }
 
-    @PutMapping("/{id}/updateStatus")
+    @PatchMapping
     public ResponseEntity<Long> updateStatusTask(
-            @PathVariable Long id,
+            @RequestBody TaskDto taskDto,
             @RequestParam String status) {
-        return taskService.updateStatusTask(id, status);
+        return taskClient.updateStatusTask(taskDto, status);
     }
 
-    @PutMapping("/{id}/updateExecutor")
+    @PatchMapping
     public ResponseEntity<Long> updateExecutorTask(
-            @PathVariable Long id,
+            @RequestBody TaskDto taskDto,
             @RequestParam Long executor) {
-        return taskService.updateExecutorTask(id, executor);
+        return taskClient.updateExecutorTask(taskDto, executor);
     }
 
     @GetMapping("/{taskId}/comment")
@@ -83,27 +78,27 @@ public class TaskController {
             @RequestParam(required = false, defaultValue = "false") Boolean isDeleted,
             @RequestParam(required = false, defaultValue = "time,desc") String sort,
             Pageable pageable) {
-        return commentService.getComments(taskId, isDeleted, sort, pageable);
+        return taskClient.getComments(taskId, isDeleted, sort, pageable);
     }
 
     @PostMapping("/{taskId}/comment")
     public ResponseEntity<CommentDto> addNewComment(
             @PathVariable Long taskId,
             @RequestBody CommentDto commentDto) {
-        return commentService.addNewComment(taskId, commentDto);
+        return taskClient.addNewComment(taskId, commentDto);
     }
 
     @PutMapping("/{taskId}/comment")
     public ResponseEntity<CommentDto> editComment(
             @PathVariable Long taskId,
             @RequestBody CommentDto commentDto) {
-        return commentService.editComment(taskId, commentDto);
+        return taskClient.editComment(taskId, commentDto);
     }
 
     @DeleteMapping("/{taskId}/comment/{commentId}")
     public ResponseEntity<Long> deleteComment(
             @PathVariable Long taskId,
             @PathVariable Long commentId) {
-        return commentService.deleteComment(taskId, commentId);
+        return taskClient.deleteComment(taskId, commentId);
     }
 }

@@ -20,8 +20,8 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class TaskServiceImpl implements TaskService {
-    private TaskRepository taskRepository;
-    private TaskDtoTaskRecordMapper mapper;
+    private final TaskRepository taskRepository;
+    private final TaskDtoTaskRecordMapper mapper;
 
     @Override
     public Page<TaskDto> getAll(
@@ -82,25 +82,25 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public ResponseEntity<Long> updateStatusTask(TaskDto taskDto, String status) {
-        if (taskRepository.getTaskById(taskDto.getId()).isEmpty()) {
-            return ResponseEntity.badRequest().build();
-        } else {
+    public ResponseEntity<Long> updateStatusTask(Long id, String status) {
+        Optional<TaskRecord> taskRecord = taskRepository.getTaskById(id);
+        if (taskRecord.isPresent()) {
             StatusType statusType = StatusType.valueOf(status);
-            TaskRecord taskRecord = mapper.taskDtoToTaskRecordForEdit(taskDto);
-            taskRepository.updateStatusTask(taskRecord, statusType);
-            return ResponseEntity.ok().body(taskRecord.getId());
+            taskRepository.updateStatusTask(taskRecord.get(), statusType);
+            return ResponseEntity.ok().body(taskRecord.get().getId());
+        } else {
+            return ResponseEntity.badRequest().build();
         }
     }
 
     @Override
-    public ResponseEntity<Long> updateExecutorTask(TaskDto taskDto, Long executorId) {
-        if (taskRepository.getTaskById(taskDto.getId()).isEmpty()) {
-            return ResponseEntity.badRequest().build();
+    public ResponseEntity<Long> updateExecutorTask(Long id, Long executorId) {
+        Optional<TaskRecord> taskRecord = taskRepository.getTaskById(id);
+        if (taskRecord.isPresent()) {
+            taskRepository.updateExecutorTask(taskRecord.get(), executorId);
+            return ResponseEntity.ok().body(taskRecord.get().getId());
         } else {
-            TaskRecord taskRecord = mapper.taskDtoToTaskRecordForEdit(taskDto);
-            taskRepository.updateExecutorTask(taskRecord, executorId);
-            return ResponseEntity.ok().body(taskRecord.getId());
+            return ResponseEntity.badRequest().build();
         }
     }
 }
