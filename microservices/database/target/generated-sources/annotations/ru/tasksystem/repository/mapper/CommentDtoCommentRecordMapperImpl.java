@@ -7,7 +7,7 @@ import ru.tasksystem.dto.CommentDto;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-08-12T17:54:01+0200",
+    date = "2024-08-13T14:36:54+0200",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.1 (Oracle Corporation)"
 )
 @Component
