@@ -1,0 +1,38 @@
+version: '3.7'
+
+services:
+  gateway:
+    image: test4/taskms:gateway
+    container_name: "gateway"
+    networks:
+      - task-ms
+    ports:
+      - "8030:8030"
+
+  tasks:
+    image: test4/taskms:tasks
+    container_name: "tasks"
+    networks:
+      - task-ms
+    ports:
+      - "8081:8081"
+
+  database:
+    image: test4/taskms:database
+    container_name: "database"
+    networks:
+      - task-ms
+    ports:
+      - "8050:8050"
+
+  profile:
+    image: test4/taskms:profile
+    container_name: "profile"
+    networks:
+      - task-ms
+    ports:
+      - "8040:8040"
+
+networks:
+  social-net:
+    driver: bridge

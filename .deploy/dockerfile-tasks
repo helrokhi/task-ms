@@ -1,0 +1,8 @@
+FROM openjdk:21
+
+ARG JAR_FILE=microservices/tasks/target/tasks-1.0-SNAPSHOT.jar
+ARG APP_FILE=application-docker.yaml
+COPY ${JAR_FILE} tasks.jar
+COPY ${APP_FILE} application.yaml
+EXPOSE 8081
+ENTRYPOINT ["java","-jar","/tasks.jar"]

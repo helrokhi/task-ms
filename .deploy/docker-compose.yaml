@@ -1,0 +1,56 @@
+version: '3.7'
+
+services:
+  gateway:
+    image: test4/taskms:gateway
+    container_name: "gateway"
+    networks:
+      - task-ms
+    ports:
+      - "8030:8030"
+
+  tasks:
+    image: test4/taskms:tasks
+    container_name: "tasks"
+    networks:
+      - task-ms
+
+  database:
+    image: test4/taskms:database
+    container_name: "database"
+    networks:
+      - task-ms
+
+  profile:
+    image: test4/taskms:profile
+    container_name: "profile"
+    networks:
+      - task-ms
+
+  grafana:
+    build: '/home/taskms/metrics/grafana'
+    container_name: "grafana"
+    ports:
+      - "3000:3000"
+    volumes:
+      - /home/taskms/grafana:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    networks:
+      - task-ms
+
+  prometheus:
+    image: prom/prometheus
+    container_name: "prometheus"
+    ports:
+      - "9090:9090"
+    volumes:
+      - /home/task-ms/metrics/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - /home/task-ms/prometheus:/prometheus
+    networks:
+      - task-ms
+
+networks:
+  task-ms:
+    driver: bridge
