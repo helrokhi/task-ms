@@ -9,7 +9,7 @@ task:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/test4
+    url: jdbc:postgresql://db:5432/test4
     username: admin
     password: 11111111
     driver-class-name: org.postgresql.Driver
