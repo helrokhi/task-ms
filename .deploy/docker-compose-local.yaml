@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   gateway:
-    image: test4/taskms:gateway
+    image: helrokhitest4/task-ms:gateway
     container_name: "gateway"
     networks:
       - task-ms
@@ -10,7 +10,7 @@ services:
       - "8030:8030"
 
   tasks:
-    image: test4/taskms:tasks
+    image: helrokhitest4/task-ms:tasks
     container_name: "tasks"
     networks:
       - task-ms
@@ -18,7 +18,7 @@ services:
       - "8081:8081"
 
   database:
-    image: test4/taskms:database
+    image: helrokhitest4/task-ms:database
     container_name: "database"
     networks:
       - task-ms
@@ -26,7 +26,7 @@ services:
       - "8050:8050"
 
   profile:
-    image: test4/taskms:profile
+    image: helrokhitest4/task-ms:profile
     container_name: "profile"
     networks:
       - task-ms
@@ -34,5 +34,5 @@ services:
       - "8040:8040"
 
 networks:
-  social-net:
+  task-ms:
     driver: bridge

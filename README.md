@@ -26,31 +26,26 @@
         password:
         driver-class-name:
 
-## Вход в docker
-
+## Локальный запуск
     docker login -u helrokhitest4 -p helrokhitest4
 
-## Build 
+    docker network create -d bridge test4-task-ms-net
 
-    docker build -f .deploy/dockerfile-gateway -t test4/taskms:gateway .
-    docker build -f .deploy/dockerfile-tasks -t test4/taskms:tasks .
-    docker build -f .deploy/dockerfile-database -t test4/taskms:database .
-    docker build -f .deploy/dockerfile-profile -t test4/taskms:profile .
-
-## Push
-    docker push test4/taskms:gateway
-    docker push test4/taskms:tasks
-    docker push test4/taskms:database
-    docker push test4/taskms:profile
-
-## Создание контейнеров с помощью docker compose
-
-    docker-compose -p="test4-taskms-backend" -f .deploy/docker-compose.yaml up -d
-
-## Pull microservices' images:
+    docker run -d --name taskdb --network test4-task-ms-net -p 5432:5432 -v data:/var/lib/postgresql/data -e POSTGRES_USER=admin -e POSTGRES_DB=test4 -e POSTGRES_PASSWORD=11111111 postgres:16.0-alpine3.18
 
     docker-compose -f .deploy/docker-compose-local.yaml pull
 
-## Create microservices' containers using docker compose:
+    docker-compose -p="test4-task-ms-net" -f .deploy/docker-compose-local.yaml up -d
 
-    docker-compose -p="test-taskms-backend" -f .deploy/docker-compose-local.yaml up -d
+
+## Build images:
+    docker build -f .deploy/dockerfile-gateway -t helrokhitest4/task-ms:gateway .
+    docker build -f .deploy/dockerfile-database -t helrokhitest4/task-ms:database .
+    docker build -f .deploy/dockerfile-profile -t helrokhitest4/task-ms:profile .
+    docker build -f .deploy/dockerfile-tasks -t helrokhitest4/task-ms:tasks .    
+
+## Push images into Docker:
+    docker push helrokhitest4/task-ms:gateway
+    docker push helrokhitest4/task-ms:database
+    docker push helrokhitest4/task-ms:profile
+    docker push helrokhitest4/task-ms:tasks
