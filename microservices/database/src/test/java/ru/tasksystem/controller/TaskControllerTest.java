@@ -1,10 +1,8 @@
 package ru.tasksystem.controller;
 
-import jakarta.servlet.ServletContext;
 import org.junit.jupiter.api.Test;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.hamcrest.Matchers;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -28,7 +26,6 @@ import ru.tasksystem.service.tasks.TaskService;
 
 import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @WebMvcTest(TaskController.class)
 class TaskControllerTest {
@@ -46,15 +43,50 @@ class TaskControllerTest {
     private ObjectMapper objectMapper;
 
     @Test
-    void getAll() {
+    void getAll() throws Exception {
+
+        List<TaskDto> tasks = getTaskDtos();
+
+        String sort = "time,desc";
+        Pageable pageable = PageRequest.of(0, 20);
+
+        Page<TaskDto> tasksDtoPage = new PageImpl<>(tasks, pageable, tasks.size());
+
+        Mockito.when(taskService.getAll(null, null, null, null,
+                        false, null, null,
+                        sort, pageable))
+                .thenReturn(tasksDtoPage);
+
+        String tasksJson = objectMapper.writeValueAsString(tasksDtoPage);
+
+        mockMvc
+                .perform(
+                        MockMvcRequestBuilders
+                                .get("/tasks")
+                                .param("isDeleted", "false")
+                )
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().string(tasksJson));
+
+        Mockito.verify(taskService, Mockito.times(1))
+                .getAll(null, null, null, null,
+                        false, null, null,
+                        sort, pageable);
+
+    }
+
+    private static List<TaskDto> getTaskDtos() {
         OffsetDateTime time = OffsetDateTime.parse("2024-08-13T16:00:05.829402900Z");
-        List<TaskDto> tasksList = List.of(
+
+        return List.of(
                 new TaskDto(1L, time, 2L, 3L, "title", "text",
                         StatusType.NEW, PriorityType.LOW, 0, false),
                 new TaskDto(2L, time, 2L, 4L, "title", "text",
-                        StatusType.PROCESS, PriorityType.MEDIUM, 0, false)
+                        StatusType.PROCESS, PriorityType.MEDIUM, 0, false),
+                new TaskDto(3L, time, 2L, 5L, "title", "text",
+                        StatusType.COMPLETE, PriorityType.HIGH, 0, false)
         );
-
     }
 
     @Test
@@ -228,6 +260,36 @@ class TaskControllerTest {
 
     @Test
     void getComments() throws Exception{
+        OffsetDateTime time = OffsetDateTime.parse("2024-08-13T16:00:05.829402900Z");
+        Long taskId = 2L;
+        List<CommentDto> comments = List.of(
+                new CommentDto(1L, time, taskId, "text", false),
+                new CommentDto(2L, time, taskId, "text", false),
+                new CommentDto(3L, time, taskId, "text", false)
+        );
+
+        String sort = "time,desc";
+        Pageable pageable = PageRequest.of(0, 20);
+
+        Page<CommentDto> commentDtoPage = new PageImpl<>(comments, pageable, comments.size());
+
+        Mockito.when(commentService.getComments(taskId, false, sort, pageable))
+                .thenReturn(ResponseEntity.ok(commentDtoPage));
+
+        String commentsJson = objectMapper.writeValueAsString(commentDtoPage);
+
+        mockMvc
+                .perform(
+                        MockMvcRequestBuilders
+                                .get("/tasks/{taskId}/comment", taskId)
+                                .param("isDeleted" , "false")
+                )
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().string(commentsJson));
+
+        Mockito.verify(commentService, Mockito.times(1))
+                .getComments(taskId, false, sort, pageable);
 
     }
 
